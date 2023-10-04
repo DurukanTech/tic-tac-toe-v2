@@ -31,7 +31,14 @@ const winningCombinations = [
   { combo: [0, 4, 8], strikeClass: "strike-diagonal-1" },
   { combo: [2, 4, 6], strikeClass: "strike-diagonal-2" },
 ]
-
+const checkDraw = (tiles, gameState, setGameState) => {
+  if (
+    tiles.every((tile) => tile !== null) &&
+    gameState === GameState.inProgress
+  ) {
+    setGameState(GameState.draw)
+  }
+}
 const checkWinner = (tiles, setStrikeClass, setGameState) => {
   for (const { combo, strikeClass } of winningCombinations) {
     const tileValue1 = tiles[combo[0]]
@@ -95,6 +102,10 @@ const TicTacToe = () => {
       gameOverSound.play()
     }
   }, [gameState])
+
+  useEffect(() => {
+    checkDraw(tiles, gameState, setGameState)
+  }, [tiles])
   return (
     <div>
       <h1>Tic Tac Toe</h1>
